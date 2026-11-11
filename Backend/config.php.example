@@ -1,0 +1,19 @@
+<?php
+/**
+ * Configuración de Base de Datos - GestionGym
+ * 
+ * INSTRUCCIONES:
+ * 1. Copia este archivo como 'config.php'
+ * 2. Reemplaza los valores con tus credenciales reales
+ * 3. NO subas config.php a control de versiones
+ */
+
+// Credenciales de Base de Datos
+define('DB_HOST', 'localhost');      // Host del servidor MySQL
+define('DB_USER', 'root');           // Usuario de MySQL
+define('DB_PASS', '');               // Contraseña de MySQL
+define('DB_NAME', 'Alerta_Campus');    // Nombre de la base de datos
+
+// Opciones adicionales
+define('DB_PORT', 3306);             // Puerto MySQL (por defecto 3306)
+define('DB_CHARSET', 'utf8mb4');     // Charset para caracteres especiales

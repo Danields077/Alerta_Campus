@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Logo provisional">
+  <circle cx="60" cy="60" r="56" fill="#ffffff" stroke="#0b2a5b" stroke-width="4"/>
+  <path d="M60 24c-14 0-24 10-24 24v18l-8 10h64l-8-10V48c0-14-10-24-24-24z" fill="#0b2a5b"/>
+  <circle cx="60" cy="86" r="7" fill="#0b2a5b"/>
+</svg>

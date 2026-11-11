@@ -1,6 +1,6 @@
 <?php
 /**
- * Conexión a Base de Datos - GestionGym
+ * Conexión a Base de Datos - Alerta Campus
  * 
  * Archivo responsable de establecer la conexión MySQL
  */
@@ -24,4 +24,3 @@ $conn->set_charset(DB_CHARSET);
 if ($conn->error) {
     throw new Exception("Error al establecer charset: " . $conn->error);
 }
-
