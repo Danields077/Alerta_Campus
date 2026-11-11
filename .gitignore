@@ -1,0 +1,14 @@
+# Extensiones de Visual Studio Code
+.vscode/
+.history/
+
+# Archivos del sistema operativo
+Thumbs.db
+.DS_Store
+
+# Archivos de configuración de base de datos (¡Importante!)
+# Si tienes un archivo donde guardas el usuario y contraseña de MySQL, pon su nombre aquí:
+config.php
+
+# Archivos temporales o de logs
+*.log
