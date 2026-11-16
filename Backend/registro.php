@@ -28,7 +28,7 @@ if ($yaRegistrado) {
     exit;
 }
 
-$stmt = $conn->prepare("SELECT id_rol FROM roles WHERE nombre_rol = 'Administrador' LIMIT 1");
+$stmt = $conn->prepare("SELECT id_rol FROM roles WHERE nombre_rol = 'Estudiante' LIMIT 1");
 $stmt->execute();
 $rol = $stmt->fetch();
 
