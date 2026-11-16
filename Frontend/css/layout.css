@@ -1,0 +1,48 @@
+.navbar-campus {
+  background: linear-gradient(110deg, #0b2a5b, #123d7d);
+}
+.navbar-campus .navbar-brand,
+.navbar-campus .navbar-text,
+.navbar-campus .nav-link {
+  color: #fff;
+}
+.navbar-campus .nav-link.active {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: .35rem;
+}
+.navbar-campus .navbar-toggler {
+  border-color: rgba(255, 255, 255, .55);
+}
+.navbar-identidad {
+  font-size: .9rem;
+  padding-right: .5rem;
+}
+.dashboard-main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+.dashboard-hero {
+  background: linear-gradient(135deg, #fff, #edf3fc);
+  border: 1px solid #d5dbe7;
+  border-left: 6px solid #0b2a5b;
+  border-radius: 12px;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  box-shadow: 0 4px 18px rgba(11, 42, 91, .07);
+}
+.dashboard-hero p { color: #5a6580; }
+.dashboard-card {
+  border: 1px solid #d5dbe7;
+  border-radius: 12px;
+  box-shadow: 0 3px 14px rgba(11, 42, 91, .06);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(11, 42, 91, .12);
+}
+.dashboard-footer {
+  color: #5a6580;
+  border-top: 1px solid #d5dbe7;
+}

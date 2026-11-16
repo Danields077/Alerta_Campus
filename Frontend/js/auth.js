@@ -101,20 +101,17 @@ if (formRegistro) {
   });
 }
 
-// ---------- PANTALLA DE INICIO (requiere sesión) ----------
-const btnSalir = document.getElementById('btn-salir');
-if (btnSalir) {
+// ---------- Panel de control (requiere sesión) ----------
+const accionesInicio = document.getElementById('acciones-inicio');
+if (accionesInicio) {
   llamarApi('me').then((r) => {
-    if (r.ok) {
-      document.getElementById('saludo').textContent = 'Bienvenido, ' + r.usuario.nombre;
-      document.getElementById('detalle').textContent = 'Sesión iniciada con ' + r.usuario.correo;
-    } else {
+    if (!r.ok || !r.usuario) {
       window.location.href = 'index.html';
+      return;
     }
+    window.AlertaCampusLayout.renderizarNavbar(r.usuario, 'inicio');
+    window.AlertaCampusLayout.renderizarAccesos(r.usuario);
+    document.getElementById('saludo').textContent = 'Bienvenido, ' + r.usuario.nombre;
+    document.getElementById('detalle').textContent = r.usuario.correo + ' · ' + r.usuario.rol;
   }).catch(() => { window.location.href = 'index.html'; });
-
-  btnSalir.addEventListener('click', async () => {
-    await llamarApi('logout', {}).catch(() => {});
-    window.location.href = 'index.html';
-  });
 }

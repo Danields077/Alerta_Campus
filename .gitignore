@@ -10,5 +10,9 @@ Thumbs.db
 # Si tienes un archivo donde guardas el usuario y contraseña de MySQL, pon su nombre aquí:
 config.php
 
+# Evidencias cargadas por usuarios (se conserva la regla de protección Apache)
+/uploads/evidencias/*
+!/uploads/evidencias/.htaccess
+
 # Archivos temporales o de logs
 *.log

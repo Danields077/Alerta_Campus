@@ -1,0 +1,19 @@
+.modulo-contenido { max-width: 1180px; }
+.modulo-contenido .bienvenida { margin-bottom: 24px; }
+.marca-enlace { color: #fff; text-decoration: none; }
+.nav-modulo { display: flex; gap: 18px; }
+.nav-modulo a { color: #fff; text-decoration: none; font-weight: 600; }
+.nav-modulo a:hover { text-decoration: underline; }
+.acciones-inicio { display: flex; gap: 12px; margin-top: 20px; }
+.acciones-inicio a { width: auto; text-decoration: none; }
+.progreso-pasos { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+.progreso-pasos span { padding: 7px 12px; border-radius: 20px; background: #e9edf5; color: #5a6580; font-size: .9rem; }
+.progreso-pasos .paso-activo { background: #0b2a5b; color: #fff; }
+.modulo-contenido .form-control, .modulo-contenido .form-select { color: #0b2a5b; }
+.badge-sin-area { background: #fff3cd; color: #664d03; }
+.timeline-item { border-left: 3px solid #1c4a94; padding: 0 0 16px 14px; margin-left: 6px; }
+@media (max-width: 800px) {
+  .barra { flex-wrap: wrap; gap: 12px; }
+  .nav-modulo { order: 3; width: 100%; }
+  .acciones-inicio { flex-direction: column; }
+}

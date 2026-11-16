@@ -19,10 +19,8 @@ $stmt = $conn->prepare(
      WHERE correo = ? OR identificador_institucional = ?
      LIMIT 1'
 );
-$stmt->bind_param('ss', $correo, $identificador);
-$stmt->execute();
-$yaRegistrado = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+$stmt->execute([$correo, $identificador]);
+$yaRegistrado = $stmt->fetch();
 
 if ($yaRegistrado) {
     http_response_code(409);
@@ -30,10 +28,9 @@ if ($yaRegistrado) {
     exit;
 }
 
-$stmt = $conn->prepare("SELECT id_rol FROM roles WHERE nombre_rol = 'Estudiante' LIMIT 1");
+$stmt = $conn->prepare("SELECT id_rol FROM roles WHERE nombre_rol = 'Administrador' LIMIT 1");
 $stmt->execute();
-$rol = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+$rol = $stmt->fetch();
 
 if (!$rol) {
     http_response_code(500);
@@ -47,12 +44,11 @@ $stmt = $conn->prepare(
     'INSERT INTO usuarios (id_rol, identificador_institucional, nombre_completo, correo, password_hash)
      VALUES (?, ?, ?, ?, ?)'
 );
-$stmt->bind_param('issss', $idRol, $identificador, $nombre, $correo, $passwordHash);
 
 try {
-    $stmt->execute();
-} catch (mysqli_sql_exception $e) {
-    if ($e->getCode() !== 1062) {
+    $stmt->execute([$idRol, $identificador, $nombre, $correo, $passwordHash]);
+} catch (PDOException $e) {
+    if ($e->getCode() !== '23000' || (int) ($e->errorInfo[1] ?? 0) !== 1062) {
         throw $e;
     }
 
@@ -61,8 +57,7 @@ try {
     exit;
 }
 
-$nuevoId = $conn->insert_id;
-$stmt->close();
+$nuevoId = (int) $conn->lastInsertId();
 http_response_code(201);
 echo json_encode(['ok' => true, 'mensaje' => 'Cuenta creada correctamente',
     'usuario' => ['id' => $nuevoId, 'nombre' => $nombre, 'correo' => $correo]]);
