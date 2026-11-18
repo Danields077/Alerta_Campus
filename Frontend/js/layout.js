@@ -41,6 +41,12 @@
     } else if (['Administrador', 'Jefe de departamento'].includes(usuario.rol)) {
       opciones.push({ texto: 'Consulta general', url: 'consulta_general.html', pagina: 'consulta' });
     }
+    if (['Administrador', 'Jefe de departamento', 'Personal de atención'].includes(usuario.rol)) {
+      opciones.push({ texto: 'Atención de reportes', url: 'area.html', pagina: 'area' });
+    }
+    if (usuario.rol === 'Administrador') {
+      opciones.push({ texto: 'Usuarios', url: 'usuarios.html', pagina: 'usuarios' });
+    }
 
     opciones.forEach((opcion) => {
       const item = crearElemento('li', 'nav-item');
@@ -123,12 +129,37 @@
         accion: 'Consultar reportes',
         url: 'consulta_general.html',
       }];
+      accesos.push({
+        titulo: 'Vista de atención',
+        descripcion: 'Visualiza todos los reportes y filtra por área y estado.',
+        accion: 'Ver todos los reportes',
+        url: 'area.html',
+      });
+      accesos.push({
+        titulo: 'Gestión de usuarios',
+        descripcion: 'Registra, consulta, actualiza y administra las cuentas del campus.',
+        accion: 'Administrar usuarios',
+        url: 'usuarios.html',
+      });
     } else if (usuario.rol === 'Jefe de departamento') {
       accesos = [{
         titulo: 'Reportes de mi área',
         descripcion: 'Consulta y filtra los reportes asignados a tu departamento.',
         accion: 'Consultar mi área',
         url: 'consulta_general.html',
+      }];
+      accesos.push({
+        titulo: 'Atención de reportes',
+        descripcion: 'Atiende, registra avances y verifica las incidencias asignadas.',
+        accion: 'Abrir atención',
+        url: 'area.html',
+      });
+    } else if (usuario.rol === 'Personal de atención') {
+      accesos = [{
+        titulo: 'Atención de reportes',
+        descripcion: 'Atiende los reportes asignados a tu área y registra avances.',
+        accion: 'Abrir atención',
+        url: 'area.html',
       }];
     }
     accesos.forEach((acceso) => crearTarjeta(destino, acceso));

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de usuarios | Alerta Campus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+</head>
+<body>
+  <header id="app-navbar"></header>
+  <main class="dashboard-main">
+    <div id="mensaje-global" aria-live="polite"></div>
+    <section class="bienvenida">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+          <h1 class="h3 mb-1">Gestión de usuarios</h1>
+          <p class="text-muted mb-0">Consulta y administra las cuentas del campus.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="nuevo-usuario">Nuevo usuario</button>
+      </div>
+
+      <form id="filtros-usuarios" class="row g-2 align-items-end mb-4">
+        <div class="col-sm-6 col-lg-3">
+          <label class="form-label" for="filtro-nombre">Nombre</label>
+          <input class="form-control" id="filtro-nombre" name="nombre" type="search" maxlength="150" />
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <label class="form-label" for="filtro-correo">Correo</label>
+          <input class="form-control" id="filtro-correo" name="correo" type="search" maxlength="190" />
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <label class="form-label" for="filtro-perfil">Perfil</label>
+          <select class="form-select" id="filtro-perfil" name="perfil">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <label class="form-label" for="filtro-estado">Estado</label>
+          <select class="form-select" id="filtro-estado" name="estado">
+            <option value="">Todos</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+        <div class="col-lg-2 d-flex gap-2">
+          <button type="submit" class="btn btn-outline-primary flex-fill">Buscar</button>
+          <button type="reset" class="btn btn-outline-secondary" id="limpiar-filtros">Limpiar</button>
+        </div>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Perfil</th>
+              <th>Área</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="filas-usuarios"></tbody>
+        </table>
+      </div>
+      <p id="sin-usuarios" class="text-muted" hidden>No se encontraron usuarios</p>
+      <nav aria-label="Paginación de usuarios">
+        <ul class="pagination justify-content-center" id="paginacion-usuarios"></ul>
+      </nav>
+    </section>
+  </main>
+
+  <div class="modal fade" id="modal-usuario" tabindex="-1" aria-labelledby="modal-usuario-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <form id="form-usuario">
+          <div class="modal-header">
+            <h2 class="modal-title fs-5" id="modal-usuario-titulo">Nuevo usuario</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id_usuario" id="id-usuario" />
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="usuario-nombre">Nombre completo</label>
+                <input class="form-control" id="usuario-nombre" name="nombre" maxlength="150" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="usuario-identificador">Número de control o RFC</label>
+                <input class="form-control" id="usuario-identificador" name="identificador_institucional" maxlength="50" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="usuario-correo">Correo institucional</label>
+                <input class="form-control" type="email" id="usuario-correo" name="correo" maxlength="190" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="usuario-perfil">Perfil</label>
+                <select class="form-select" id="usuario-perfil" name="perfil" required>
+                  <option value="">Selecciona un perfil</option>
+                </select>
+              </div>
+              <div class="col-md-6" id="grupo-area" hidden>
+                <label class="form-label" for="usuario-area">Área</label>
+                <select class="form-select" id="usuario-area" name="id_area">
+                  <option value="">Selecciona un área</option>
+                </select>
+              </div>
+              <div class="col-md-6" id="grupo-estado" hidden>
+                <label class="form-label" for="usuario-estado">Estado</label>
+                <select class="form-select" id="usuario-estado" name="estado">
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="usuario-password">Contraseña <span id="password-opcional"></span></label>
+                <input class="form-control" type="password" id="usuario-password" name="password" autocomplete="new-password" />
+                <div class="form-text" id="password-ayuda">Mínimo 8 caracteres, con letras y números.</div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="guardar-usuario">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-eliminar-usuario" tabindex="-1" aria-labelledby="modal-eliminar-titulo" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="modal-eliminar-titulo">Confirmar eliminación</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">¿Seguro que deseas eliminar esta cuenta? Esta acción no se puede deshacer.</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmar-eliminar">Eliminar usuario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/usuarios.js"></script>
+</body>
+</html>

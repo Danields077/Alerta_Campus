@@ -31,6 +31,9 @@ document.querySelectorAll('.ver-password').forEach((btn) => {
 // ---------- LOGIN ----------
 const formLogin = document.getElementById('form-login');
 if (formLogin) {
+  if (new URLSearchParams(window.location.search).get('registro') === 'ok') {
+    mostrarMensaje('El usuario se registró exitosamente', 'exito');
+  }
   // Si ya hay sesión, pasar directo al inicio
   llamarApi('me').then((r) => { if (r.ok) window.location.href = 'inicio.html'; }).catch(() => {});
 
@@ -69,11 +72,15 @@ if (formRegistro) {
     const nombre = document.getElementById('nombre').value.trim();
     const identificadorInstitucional = document.getElementById('identificador_institucional').value.trim();
     const correo = document.getElementById('correo').value.trim();
+    const perfil = document.getElementById('perfil').value;
     const password = document.getElementById('password').value;
     const confirmar = document.getElementById('confirmar').value;
 
-    if (!nombre || !identificadorInstitucional || !correo || !password || !confirmar) {
+    if (!nombre || !identificadorInstitucional || !correo || !perfil || !password || !confirmar) {
       return mostrarMensaje('Completa todos los campos', 'error');
+    }
+    if (password.length < 8 || !/\p{L}/u.test(password) || !/[0-9]/.test(password)) {
+      return mostrarMensaje('La contraseña debe tener al menos 8 caracteres, letras y números.', 'error');
     }
     if (password !== confirmar) {
       return mostrarMensaje('Las contraseñas no coinciden', 'error');
@@ -85,11 +92,12 @@ if (formRegistro) {
         nombre,
         identificador_institucional: identificadorInstitucional,
         correo,
-        password
+        perfil,
+        password,
+        confirmar
       });
       if (r.ok) {
-        mostrarMensaje('Cuenta creada. Redirigiendo al inicio de sesión…', 'exito');
-        setTimeout(() => (window.location.href = 'index.html'), 1400);
+        window.location.href = 'index.html?registro=ok';
       } else {
         mostrarMensaje(r.mensaje || 'No se pudo crear la cuenta', 'error');
         boton.disabled = false;

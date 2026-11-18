@@ -17,3 +17,6 @@ define('DB_NAME', 'Alerta_Campus');    // Nombre de la base de datos
 // Opciones adicionales
 define('DB_PORT', 3306);             // Puerto MySQL (por defecto 3306)
 define('DB_CHARSET', 'utf8mb4');     // Charset para caracteres especiales
+
+// Dominio permitido para las cuentas institucionales.
+define('INSTITUTIONAL_EMAIL_DOMAIN', 'zacatepec.tecnm.mx');

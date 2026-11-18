@@ -73,11 +73,12 @@ try {
         throw new RuntimeException('Falta el estado Pendiente en el catálogo.');
     }
 
+    $folioTemporal = 'TMP-' . bin2hex(random_bytes(12));
     $insertar = $conn->prepare(
         'INSERT INTO reportes
             (id_usuario_creador, id_categoria, id_ubicacion, id_estado_actual,
-             id_area_asignada, id_jefe_verificador, prioridad, descripcion)
-         VALUES (?, ?, ?, ?, ?, NULL, \'Media\', ?)'
+             id_area_asignada, id_jefe_verificador, prioridad, descripcion, folio)
+         VALUES (?, ?, ?, ?, ?, NULL, \'Media\', ?, ?)'
     );
     $area = $categoriaRow['id_area_responsable'] === null ? null : (int) $categoriaRow['id_area_responsable'];
     $insertar->bindValue(1, (int) $usuario['id_usuario'], PDO::PARAM_INT);
@@ -86,6 +87,7 @@ try {
     $insertar->bindValue(4, (int) $idPendiente, PDO::PARAM_INT);
     $insertar->bindValue(5, $area, $area === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
     $insertar->bindValue(6, $descripcion, PDO::PARAM_STR);
+    $insertar->bindValue(7, $folioTemporal, PDO::PARAM_STR);
     $insertar->execute();
     $idReporte = (int) $conn->lastInsertId();
     $anioQuery = $conn->prepare('SELECT YEAR(fecha_creacion) FROM reportes WHERE id_reporte = ?');
