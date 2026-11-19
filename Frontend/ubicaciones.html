@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de ubicaciones | Alerta Campus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+</head>
+<body>
+  <header id="app-navbar"></header>
+  <main class="dashboard-main">
+    <div id="mensaje-global" aria-live="polite"></div>
+    <section class="bienvenida">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+          <h1 class="h3 mb-1">Gestión de ubicaciones</h1>
+          <p class="text-muted mb-0">Edificios, aulas y espacios del campus que se pueden elegir al reportar una incidencia.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="nueva-ubicacion">Nueva ubicación</button>
+      </div>
+
+      <form id="filtros-ubicaciones" class="row g-2 align-items-end mb-4">
+        <div class="col-sm-6 col-lg-4">
+          <label class="form-label" for="filtro-edificio">Edificio</label>
+          <input class="form-control" id="filtro-edificio" name="edificio" type="search" maxlength="100" />
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <label class="form-label" for="filtro-espacio">Aula o espacio</label>
+          <input class="form-control" id="filtro-espacio" name="espacio" type="search" maxlength="100" />
+        </div>
+        <div class="col-lg-3 d-flex gap-2">
+          <button type="submit" class="btn btn-outline-primary flex-fill">Buscar</button>
+          <button type="reset" class="btn btn-outline-secondary" id="limpiar-filtros">Limpiar</button>
+        </div>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>Edificio</th>
+              <th>Piso</th>
+              <th>Área general</th>
+              <th>Aula o espacio</th>
+              <th class="text-center">Reportes</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="filas-ubicaciones"></tbody>
+        </table>
+      </div>
+      <p id="sin-ubicaciones" class="text-muted" hidden>No se encontraron ubicaciones</p>
+      <p id="total-ubicaciones" class="small text-muted mb-2"></p>
+      <nav aria-label="Paginación de ubicaciones">
+        <ul class="pagination justify-content-center flex-wrap" id="paginacion-ubicaciones"></ul>
+      </nav>
+    </section>
+  </main>
+
+  <div class="modal fade" id="modal-ubicacion" tabindex="-1" aria-labelledby="modal-ubicacion-titulo" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="form-ubicacion" novalidate>
+          <div class="modal-header">
+            <h2 class="modal-title fs-5" id="modal-ubicacion-titulo">Nueva ubicación</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="id-ubicacion" />
+            <div class="mb-3">
+              <label class="form-label" for="ubicacion-edificio">Edificio</label>
+              <input class="form-control" id="ubicacion-edificio" list="lista-edificios" maxlength="100" required />
+              <datalist id="lista-edificios"></datalist>
+            </div>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label class="form-label" for="ubicacion-piso">Piso</label>
+                <input class="form-control" id="ubicacion-piso" list="lista-pisos" maxlength="50" required />
+                <datalist id="lista-pisos"></datalist>
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label" for="ubicacion-area">Área general</label>
+                <input class="form-control" id="ubicacion-area" list="lista-areas" maxlength="100" required />
+                <datalist id="lista-areas"></datalist>
+              </div>
+            </div>
+            <div class="mt-3">
+              <label class="form-label" for="ubicacion-espacio">Aula o espacio</label>
+              <input class="form-control" id="ubicacion-espacio" maxlength="100" required />
+              <div class="form-text">Ejemplo: Aula 3, Baño de mujeres, Pasillo. La combinación completa no puede repetirse.</div>
+            </div>
+            <div id="aviso-modal" class="alert alert-warning mt-3 mb-0" role="alert" hidden></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="guardar-ubicacion">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-eliminar-ubicacion" tabindex="-1" aria-labelledby="modal-eliminar-titulo" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="modal-eliminar-titulo">Confirmar eliminación</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          ¿Seguro que deseas eliminar la ubicación <strong id="nombre-eliminar"></strong>? Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmar-eliminar">Eliminar ubicación</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/comun.js"></script>
+  <script src="js/ubicaciones.js"></script>
+</body>
+</html>
