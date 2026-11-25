@@ -9,7 +9,7 @@
  *   POST {folio, evaluacion:'Aprobado'|'Rechazado', observaciones}
  *
  *   Aprobado  -> CERRADO (ya no puede modificarse) y se notifica al reportante.
- *   Rechazado -> Gestión de Rechazos: el reporte se reabre en PENDIENTE con las
+ *   Rechazado -> Gestión de Rechazos: el reporte se devuelve a EN ATENCIÓN con las
  *                observaciones visibles para el Personal de atención, que es notificado.
  *
  * Privacidad: nunca se expone la identidad del reportante (solo el Administrador la ve).
@@ -184,7 +184,7 @@ if ($reporte['nombre_estado'] !== 'En verificación') {
 }
 
 $aprobado = $evaluacion === 'Aprobado';
-$estadoDestino = $aprobado ? 'Cerrado' : 'Pendiente';
+$estadoDestino = $aprobado ? 'Cerrado' : 'En atención';
 
 try {
     $conn->beginTransaction();
@@ -226,11 +226,11 @@ try {
     } else {
         crearNotificaciones(
             $conn, idsUsuariosActivos($conn, 'Personal de atención', $idArea), (int) $reporte['id_reporte'],
-            'reporte devuelto', 'El reporte ' . $folio . ' fue devuelto a Pendiente. Observaciones: ' . $observaciones
+            'reporte devuelto', 'El reporte ' . $folio . ' fue devuelto a En atención. Observaciones: ' . $observaciones
         );
         crearNotificaciones(
             $conn, [(int) $reporte['id_usuario_creador']], (int) $reporte['id_reporte'],
-            'actualizacion reporte', 'El reporte ' . $folio . ' cambió a Pendiente'
+            'actualizacion reporte', 'El reporte ' . $folio . ' cambió a En atención'
         );
     }
 

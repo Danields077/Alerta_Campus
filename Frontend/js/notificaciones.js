@@ -46,7 +46,6 @@ async function marcarLeida(notificacion, elemento) {
     if (ultimoResultado) firmaLista = firmaDe(ultimoResultado); // no redibujar lo que se está leyendo
     elemento.classList.remove('no-leida');
     elemento.querySelector('.etiqueta-nueva')?.remove();
-    window.AlertaCampusLayout.pintarInsignia(resultado.no_leidas);
     actualizarResumen(resultado.no_leidas);
   } catch (error) {
     mostrarAlerta(error.message, error.tipo);
@@ -111,7 +110,6 @@ async function cargarNotificaciones(pagina = paginaActual, esSondeo = false) {
   try {
     const resultado = await llamarApi('notificaciones.php?' + parametros.toString());
     paginaActual = resultado.pagina;
-    window.AlertaCampusLayout.pintarInsignia(resultado.no_leidas);
     actualizarResumen(resultado.no_leidas);
 
     const firma = firmaDe(resultado);

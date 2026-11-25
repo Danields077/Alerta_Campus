@@ -79,6 +79,9 @@ if ($folio === '' || mb_strlen($folio) > 32) {
 if (!in_array($accion, ['atender', 'mas_tiempo', 'verificacion', 'cerrar'], true)) {
     responder(400, ['ok' => false, 'mensaje' => 'Acción no válida.']);
 }
+if ($accion === 'cerrar' && $usuario['nombre_rol'] !== 'Jefe de departamento') {
+    responder(403, ['ok' => false, 'mensaje' => 'Solo el Jefe de departamento puede cerrar reportes.']);
+}
 if (mb_strlen($nota) > 1000) {
     responder(400, ['ok' => false, 'mensaje' => 'La nota no puede superar 1,000 caracteres.']);
 }

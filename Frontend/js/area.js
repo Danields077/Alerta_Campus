@@ -3,6 +3,7 @@ let accionPendiente = null;
 let folioPendiente = null;
 let modalAtencion;
 let esAdministrador = false;
+let esJefeDepartamento = false;
 
 function mostrarAlerta(texto, tipo = 'danger') {
   const destino = document.getElementById('mensaje-global');
@@ -82,7 +83,7 @@ async function cargarReportes() {
       } else if (!esAdministrador && reporte.nombre_estado === 'En atención') {
         agregarBoton(acciones, 'Más tiempo', 'btn-outline-secondary', reporte.folio, 'mas_tiempo', 'Registrar avance');
         agregarBoton(acciones, 'Enviar a verificación', 'btn-success', reporte.folio, 'verificacion', 'Enviar solución');
-      } else if (!esAdministrador && reporte.nombre_estado === 'En verificación') {
+      } else if (esJefeDepartamento && reporte.nombre_estado === 'En verificación') {
         agregarBoton(acciones, 'Cerrar', 'btn-success', reporte.folio, 'cerrar', 'Cerrar reporte');
       }
       filas.append(fila);
@@ -124,8 +125,9 @@ async function iniciar() {
     return;
   }
   esAdministrador = respuesta.usuario.rol === 'Administrador';
+  esJefeDepartamento = respuesta.usuario.rol === 'Jefe de departamento';
   document.getElementById('descripcion-area').textContent = esAdministrador
-    ? 'Vista global de todos los reportes. Los cambios operativos están limitados a Jefes y Personal de atención.'
+    ? 'Vista global de todos los reportes. El cierre y la devolución corresponden al Jefe de departamento.'
     : 'Reportes asignados a tu área.';
   if (esAdministrador) {
     const filtroArea = document.getElementById('filtro-area');

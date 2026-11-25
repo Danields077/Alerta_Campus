@@ -44,9 +44,15 @@
     if (['Administrador', 'Jefe de departamento', 'Personal de atención'].includes(usuario.rol)) {
       opciones.push({ texto: 'Atención de reportes', url: 'area.html', pagina: 'area' });
     }
+    if (usuario.rol === 'Jefe de departamento') {
+      opciones.push({ texto: 'Control de calidad', url: 'control_calidad.html', pagina: 'calidad' });
+    }
     if (usuario.rol === 'Administrador') {
       opciones.push({ texto: 'Usuarios', url: 'usuarios.html', pagina: 'usuarios' });
+      opciones.push({ texto: 'Categorías', url: 'categorias.html', pagina: 'categorias' });
+      opciones.push({ texto: 'Ubicaciones', url: 'ubicaciones.html', pagina: 'ubicaciones' });
     }
+    opciones.push({ texto: 'Notificaciones', url: 'notificaciones.html', pagina: 'notificaciones' });
 
     opciones.forEach((opcion) => {
       const item = crearElemento('li', 'nav-item');
@@ -121,6 +127,12 @@
           accion: 'Ver mis reportes',
           url: 'reportes.html#filtros-usuario',
         },
+        {
+          titulo: 'Notificaciones',
+          descripcion: 'Consulta los avisos sobre el estado de tus reportes.',
+          accion: 'Ver notificaciones',
+          url: 'notificaciones.html',
+        },
       ];
     } else if (usuario.rol === 'Administrador') {
       accesos = [{
@@ -129,6 +141,12 @@
         accion: 'Consultar reportes',
         url: 'consulta_general.html',
       }];
+      accesos.push({
+        titulo: 'Notificaciones',
+        descripcion: 'Consulta los avisos generados por los reportes.',
+        accion: 'Ver notificaciones',
+        url: 'notificaciones.html',
+      });
       accesos.push({
         titulo: 'Vista de atención',
         descripcion: 'Visualiza todos los reportes y filtra por área y estado.',
@@ -140,6 +158,18 @@
         descripcion: 'Registra, consulta, actualiza y administra las cuentas del campus.',
         accion: 'Administrar usuarios',
         url: 'usuarios.html',
+      });
+      accesos.push({
+        titulo: 'Categorías',
+        descripcion: 'Administra las categorías disponibles para clasificar incidencias.',
+        accion: 'Gestionar categorías',
+        url: 'categorias.html',
+      });
+      accesos.push({
+        titulo: 'Ubicaciones',
+        descripcion: 'Administra las ubicaciones disponibles para los reportes.',
+        accion: 'Gestionar ubicaciones',
+        url: 'ubicaciones.html',
       });
     } else if (usuario.rol === 'Jefe de departamento') {
       accesos = [{
@@ -154,6 +184,18 @@
         accion: 'Abrir atención',
         url: 'area.html',
       });
+      accesos.push({
+        titulo: 'Control de calidad',
+        descripcion: 'Revisa las soluciones de reportes y aprueba o devuelve su atención.',
+        accion: 'Revisar reportes',
+        url: 'control_calidad.html',
+      });
+      accesos.push({
+        titulo: 'Notificaciones',
+        descripcion: 'Consulta los avisos generados por los reportes de tu área.',
+        accion: 'Ver notificaciones',
+        url: 'notificaciones.html',
+      });
     } else if (usuario.rol === 'Personal de atención') {
       accesos = [{
         titulo: 'Atención de reportes',
@@ -161,6 +203,12 @@
         accion: 'Abrir atención',
         url: 'area.html',
       }];
+      accesos.push({
+        titulo: 'Notificaciones',
+        descripcion: 'Consulta los avisos sobre los reportes asignados a tu área.',
+        accion: 'Ver notificaciones',
+        url: 'notificaciones.html',
+      });
     }
     accesos.forEach((acceso) => crearTarjeta(destino, acceso));
   }
